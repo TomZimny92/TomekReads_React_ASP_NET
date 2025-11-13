@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="tomekreads.client/tomekreads.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="TomekReads.Server/TomekReads.Server.csproj" />
+</Solution>

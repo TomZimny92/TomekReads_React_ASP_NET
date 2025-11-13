@@ -1,0 +1,6 @@
+@TomekReads.Server_HostAddress = http://localhost:5214
+
+GET {{TomekReads.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
