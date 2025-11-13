@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using TomekReads.Server.Data.Models;
 
 namespace TomekReads.Server.Controllers
 {
