@@ -15,6 +15,7 @@ namespace TomekReads.Server.Data.Services
         public async Task<ActionResult<IEnumerable<Book>>> GetAllBooksAsync()
         {
             // read database to get all items
+            
         }
 
         public async Task<ActionResult<Book>> GetBookAsync(string id)
@@ -46,6 +47,6 @@ namespace TomekReads.Server.Data.Services
         {
 
         }
-        
+
     }
 }

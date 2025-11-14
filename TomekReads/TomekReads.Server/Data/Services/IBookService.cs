@@ -5,12 +5,12 @@ namespace TomekReads.Server.Data.Services
 {
     public interface IBookService
     {
-        public Task<ActionResult<IEnumerable<Book>>> GetAllBooksAsync();
-        public Task<ActionResult<Book>> GetBookAsync(string id);
-        public Task<ActionResult> AddBookAsync(Book book);
-        public Task<ActionResult> AddBooksAsync(IEnumerable<Book> books);
-        public Task<ActionResult> UpdateBookAsync(Book book, string id);
-        public Task<ActionResult<Book>> DeleteBookAsync(string id);
-        public Task<ActionResult<IEnumerable<Book>>> DeleteBooksAsync(IEnumerable<string> ids);
+        Task<IEnumerable<Book>?> GetAllBooksAsync();
+        Task<Book?> GetBookAsync(string id);
+        Task AddBookAsync(Book book);
+        Task AddBooksAsync(IEnumerable<Book> books);
+        Task UpdateBookAsync(Book book, string id);
+        Task<bool> DeleteBookAsync(string id);
+        Task<IEnumerable<Book>?> DeleteBooksAsync(IEnumerable<string> ids);
     }
 }

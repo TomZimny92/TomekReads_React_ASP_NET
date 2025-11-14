@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TomekReads.Server.Data.Models;
+using TomekReads.Server.Data.Services;
 
 namespace TomekReads.Server.Controllers
 {
@@ -17,11 +18,11 @@ namespace TomekReads.Server.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Book>>> GetAllBooksAsync()
+        public async Task<ActionResult<IEnumerable<Book>?>> GetAllBooksAsync()
         {
             try
             {
-                var books = await _bookService.GetAllAsync();
+                var books = await _bookService.GetAllBooksAsync();
                 if (books == null)
                 {
                     return NotFound();
@@ -37,7 +38,7 @@ namespace TomekReads.Server.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Book>> GetBookAsync(int id)
+        public async Task<ActionResult<Book>> GetBookAsync(string id)
         {
             try
             {
@@ -57,18 +58,24 @@ namespace TomekReads.Server.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Book>> AddBookAsync(Book book)
+        public async Task<ActionResult> AddBookAsync(Book book)
         {
             try
             {
 
+                await _bookService.AddBookAsync(book);
+                var newBook = await _bookService.GetBookAsync(book.Id);
+                if (newBook == null)
+                {
+
+                }
+                return Ok();
             }
-            await _bookService.AddBookAsync(book);
-            var newBook = await _bookService.GetBookAsync(book.id);
-            if (newBook == null)
+            catch (Exception ex)
             {
-                return
+                return BadRequest(ex.Message);
             }
+            
         }
     }
 }

@@ -9,9 +9,7 @@ function App() {
   return (
     <>
           <h3>Books!</h3>
-          {books.map((book) => {
-              <BookView book={book} />
-          }) }
+
     </>
   )
 }
@@ -27,8 +25,8 @@ function App() {
 // the page is re-rendered with the new book at the top
 
 // search bar to filter books list
-function LoadBooks(): void {
+//function LoadBooks(): void {
     
-}
+//}
 
 export default App
