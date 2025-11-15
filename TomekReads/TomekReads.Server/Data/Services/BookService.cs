@@ -1,36 +1,106 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TomekReads.Server.Data.Models;
 
 namespace TomekReads.Server.Data.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookService _bookService;
+        private readonly BookDbContext _bookDbContext;
 
-        public BookService(IBookService bookService)
+        public BookService(BookDbContext bookDbContext)
         {
-            _bookService = bookService;
+            _bookDbContext = bookDbContext;
         }
 
-        public async Task<ActionResult<IEnumerable<Book>>> GetAllBooksAsync()
+        public async Task<IEnumerable<Book>?> GetAllBooksAsync()
         {
-            // read database to get all items
-            
+            try
+            {
+                var books = await _bookDbContext.Books.ToListAsync<Book>();
+                if (books == null)
+                {
+                    return null;
+                }
+                return books;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
-        public async Task<ActionResult<Book>> GetBookAsync(string id)
+        public async Task<Book?> GetBookAsync(string id)
         {
-            // use id to query db
+            try
+            {
+                var foundBook = await _bookDbContext.Books.FirstOrDefaultAsync<Book>((book) => book.Id == id);
+                if (foundBook == null)
+                {
+                    return null;
+                }
+                return foundBook;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Mesasge: {ex.Message}");
+                return null;
+            }
         }
 
-        public async Task<ActionResult> AddBookAsync(Book book)
+        public async Task<Book?> AddBookAsync(Book book)
         {
-            // 
+            try
+            {
+                var newBookExists = await _bookDbContext.Books.FirstOrDefaultAsync((dbBook) => dbBook.Id == book.Id);
+                if (newBookExists == null)
+                {
+                    await _bookDbContext.Books.AddAsync(book);
+                    var newBook = await GetBookAsync(book.Id);
+                    if (newBook == null)
+                    {
+                        return null;
+                    }
+                    return newBook;
+                }
+                else
+                {
+                    Console.WriteLine("Book already exists");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
-        public async Task<ActionResult> AddBooksAsync(IEnumerable<Book> books)
+        public async Task<IEnumerable<Book>?> AddBooksAsync(IEnumerable<Book> books)
         {
-            // do the thing
+            try
+            {
+                foreach(var book in books)
+                {
+                    await _bookDbContext.Books.AddAsync(book);
+                }
+                var addedBooks = new List<Book>();
+                foreach (var book in books)
+                {
+                    var newBook = await _bookDbContext.Books.FirstOrDefaultAsync((b) => b.Id == book.Id);
+                    if (newBook != null)
+                    {
+                        addedBooks.Add(newBook);
+                    }
+                }
+                return addedBooks;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<ActionResult> UpdateBookAsync(Book book, string id)

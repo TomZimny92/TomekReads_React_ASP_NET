@@ -7,8 +7,8 @@ namespace TomekReads.Server.Data.Services
     {
         Task<IEnumerable<Book>?> GetAllBooksAsync();
         Task<Book?> GetBookAsync(string id);
-        Task AddBookAsync(Book book);
-        Task AddBooksAsync(IEnumerable<Book> books);
+        Task<Book?> AddBookAsync(Book book);
+        Task<IEnumerable<Book>?> AddBooksAsync(IEnumerable<Book> books);
         Task UpdateBookAsync(Book book, string id);
         Task<bool> DeleteBookAsync(string id);
         Task<IEnumerable<Book>?> DeleteBooksAsync(IEnumerable<string> ids);
