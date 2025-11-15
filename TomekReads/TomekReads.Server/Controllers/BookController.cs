@@ -38,7 +38,7 @@ namespace TomekReads.Server.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Book>> GetBookAsync(string id)
+        public async Task<ActionResult<Book?>> GetBookAsync(string id)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace TomekReads.Server.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> AddBookAsync(Book book)
+        public async Task<ActionResult<Book?>> AddBookAsync(Book book)
         {
             try
             {
@@ -67,13 +67,14 @@ namespace TomekReads.Server.Controllers
                 var newBook = await _bookService.GetBookAsync(book.Id);
                 if (newBook == null)
                 {
-
+                    return BadRequest();
                 }
-                return Ok();
+                return Ok(newBook);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return BadRequest();
             }
             
         }

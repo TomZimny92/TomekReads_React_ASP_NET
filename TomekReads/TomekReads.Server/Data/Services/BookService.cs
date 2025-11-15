@@ -62,6 +62,7 @@ namespace TomekReads.Server.Data.Services
                     {
                         return null;
                     }
+                    await _bookDbContext.SaveChangesAsync();
                     return newBook;
                 }
                 else
@@ -94,6 +95,7 @@ namespace TomekReads.Server.Data.Services
                         addedBooks.Add(newBook);
                     }
                 }
+                await _bookDbContext.SaveChangesAsync();
                 return addedBooks;
             }
             catch (Exception ex)
@@ -103,19 +105,74 @@ namespace TomekReads.Server.Data.Services
             }
         }
 
-        public async Task<ActionResult> UpdateBookAsync(Book book, string id)
+        public async Task UpdateBookAsync(Book book, string id)
         {
-            // update to db
+            try
+            {
+                var existingBook = await _bookDbContext.Books.FirstOrDefaultAsync((b) => b.Id == id);
+                if (existingBook == null)
+                {
+                    throw new Exception($"{book.Title} does not exist and cannot be updated");
+                }
+                await _bookDbContext.Books
+                    .Where(book => book.Id == id)
+                    .ExecuteUpdateAsync(set => set
+                        .SetProperty(b => b.Rating, book.Rating)
+                        .SetProperty(b => b.Review, book.Review));
+
+                //await _bookDbContext.SaveChangesAsync(); I don't think we need this with the Update API
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+            }
         }
 
-        public async Task<ActionResult> DeleteBookAsync(string id)
+        public async Task<bool> DeleteBookAsync(string id)
         {
-
+            try
+            {
+                var existingBook = await _bookDbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
+                if (existingBook == null)
+                {
+                    Console.WriteLine("The book you want to delete is not found");
+                    return false;
+                }
+                await _bookDbContext.Books
+                    .Where(book => book.Id == id)
+                    .ExecuteDeleteAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return false;
+            }
         }
 
-        public async Task<ActionResult> DeleteBooksAsync(IEnumerable<string> ids)
+        public async Task<IEnumerable<string>?> DeleteBooksAsync(IEnumerable<string> ids)
         {
-
+            try
+            {
+                var deletedBooks = new List<string>();
+                foreach (string id in ids)
+                {
+                    var existingBook = await _bookDbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
+                    if (existingBook != null)
+                    {
+                        deletedBooks.Add(existingBook.Id);
+                        await _bookDbContext.Books
+                            .Where(book => book.Id == id)
+                            .ExecuteDeleteAsync();
+                    }
+                }
+                return deletedBooks;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
     }
