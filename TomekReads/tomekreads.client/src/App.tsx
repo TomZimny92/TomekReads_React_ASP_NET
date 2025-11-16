@@ -1,15 +1,42 @@
-//import { useState } from 'react'
+import { useState, useEffect } from 'react'
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 import './App.css'
+import BookView from './components/BookView';
+import type { Book } from './types/Book';
 
 function App() {
-  // const [count, setCount] = useState(0)
+    const [books, setBooks] = useState(null);
+    // https://localhost:7085
+
+    useEffect(() => {
+        fetch('https://localhost:7085/api/GetAllBooksAsync')
+            .then(response => response.json())
+            .then(json => setBooks(json))
+            .catch(error => console.error(error));
+    }, []);
+
+
+
+
+    //function loadBooks() {
+    //    const xhr = new XMLHttpRequest();
+    //    xhr.open('GET', 'https://localhost:7085/api/GetAllBooksAsync');
+    //    xhr.onload = function () {
+    //        if (xhr.status === 200) {
+    //            setBooks(JSON.parse(xhr.responseText));
+    //        }
+    //    };
+    //    xhr.send();
+    //}
+
 
   return (
     <>
           <h3>Books!</h3>
-
+          {books.map((book: Book) => {
+              return <BookView book={book} />
+          })}
     </>
   )
 }
