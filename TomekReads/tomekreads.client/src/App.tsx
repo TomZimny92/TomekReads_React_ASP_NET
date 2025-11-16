@@ -6,7 +6,7 @@ import BookView from './components/BookView';
 import type { Book } from './types/Book';
 
 function App() {
-    const [books, setBooks] = useState(null);
+    const [books, setBooks] = useState(loadBooks);
     // https://localhost:7085
 
     useEffect(() => {
@@ -16,7 +16,14 @@ function App() {
             .catch(error => console.error(error));
     }, []);
 
-
+    async function loadBooks(): Promise<Book[]> {
+        const rawBooks = await fetch('https://localhost:7085/api/GetAllBooksAsync');
+        if (!rawBooks.ok) {
+            throw new Error('GetAllBooksAsync failed');
+        }
+        const rawBooksJson: Book[] = await rawBooks.json();
+        return rawBooksJson as Book[];
+    }
 
 
     //function loadBooks() {
