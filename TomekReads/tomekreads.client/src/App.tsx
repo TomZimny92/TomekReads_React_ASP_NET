@@ -6,36 +6,34 @@ import BookView from './components/BookView';
 import type { Book } from './types/Book';
 
 function App() {
-    const [books, setBooks] = useState(loadBooks);
+    const [books, setBooks] = useState<Book[]>([]);
     // https://localhost:7085
 
-    useEffect(() => {
-        fetch('https://localhost:7085/api/GetAllBooksAsync')
-            .then(response => response.json())
-            .then(json => setBooks(json))
-            .catch(error => console.error(error));
-    }, []);
+    //useEffect(() => {
+    //    fetch('https://localhost:7085/api/GetAllBooksAsync')
+    //        .then(response => response.json())
+    //        .then(json => setBooks(json))
+    //        .catch(error => console.error(error));
+    //}, []);
 
-    async function loadBooks(): Promise<Book[]> {
-        const rawBooks = await fetch('https://localhost:7085/api/GetAllBooksAsync');
-        if (!rawBooks.ok) {
-            throw new Error('GetAllBooksAsync failed');
+    useEffect(() => {
+        const bookData = async () => {
+            const response = await fetch('https://localhost:7085/api/GetAllBooksAsync');
+            // check if response is good
+            const result: Book[] = await response.json();
+            setBooks(result);
         }
-        const rawBooksJson: Book[] = await rawBooks.json();
-        return rawBooksJson as Book[];
+    })
+
+    async function loadBooks(): Book[] {
+        const rawBooks = await fetch('https://localhost:7085/api/GetAllBooksAsync');
+        const bookData: Book[] = await rawBooks.json();
+        const returnBookData: Book[] = bookData.map((book) => {
+            return book;
+        })
+        return returnBookData;
     }
 
-
-    //function loadBooks() {
-    //    const xhr = new XMLHttpRequest();
-    //    xhr.open('GET', 'https://localhost:7085/api/GetAllBooksAsync');
-    //    xhr.onload = function () {
-    //        if (xhr.status === 200) {
-    //            setBooks(JSON.parse(xhr.responseText));
-    //        }
-    //    };
-    //    xhr.send();
-    //}
 
 
   return (
