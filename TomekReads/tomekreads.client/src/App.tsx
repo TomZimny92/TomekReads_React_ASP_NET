@@ -1,40 +1,25 @@
 import { useState, useEffect } from 'react'
-//import reactLogo from './assets/react.svg'
-//import viteLogo from '/vite.svg'
 import './App.css'
 import BookView from './components/BookView';
 import type { Book } from './types/Book';
 
 function App() {
     const [books, setBooks] = useState<Book[]>([]);
-    // https://localhost:7085
-
-    //useEffect(() => {
-    //    fetch('https://localhost:7085/api/GetAllBooksAsync')
-    //        .then(response => response.json())
-    //        .then(json => setBooks(json))
-    //        .catch(error => console.error(error));
-    //}, []);
 
     useEffect(() => {
         const bookData = async () => {
-            const response = await fetch('https://localhost:7085/api/GetAllBooksAsync');
-            // check if response is good
-            const result: Book[] = await response.json();
-            setBooks(result);
+            try {
+                const response = await fetch('https://localhost:7085/api/GetAllBooksAsync');
+                // check if response is good
+                const result: Book[] = await response.json();
+                setBooks(result);
+            }
+            catch (err) {
+                console.log((err as Error).message);
+            }
         }
-    })
-
-    async function loadBooks(): Book[] {
-        const rawBooks = await fetch('https://localhost:7085/api/GetAllBooksAsync');
-        const bookData: Book[] = await rawBooks.json();
-        const returnBookData: Book[] = bookData.map((book) => {
-            return book;
-        })
-        return returnBookData;
-    }
-
-
+        bookData();
+    }, [])
 
   return (
     <>
@@ -57,8 +42,5 @@ function App() {
 // the page is re-rendered with the new book at the top
 
 // search bar to filter books list
-//function LoadBooks(): void {
-    
-//}
 
 export default App
