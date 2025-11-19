@@ -13,6 +13,18 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 //builder.Services.AddSingleton<IBookService, BookService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyCorsPolicy",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7085")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -30,5 +42,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+app.UseCors("MyCorsPolicy");
 
 app.Run();

@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\tomekreads.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:49361</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:7085</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
