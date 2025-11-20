@@ -3,5 +3,6 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="TomekReads.Server.Test/TomekReads.Server.Test.csproj" Id="e8698fe8-2e79-4141-9b1b-df2c6d0fb9ee" />
   <Project Path="TomekReads.Server/TomekReads.Server.csproj" />
 </Solution>
