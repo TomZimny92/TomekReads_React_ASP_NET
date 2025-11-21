@@ -1,21 +1,31 @@
-﻿using TomekReads.Server.Data.Services;
+﻿using TomekReads.Server.Data;
+using TomekReads.Server.Data.Services;
 
 namespace TomekReads.Server.Test
 {
+    [TestFixture]
     public class BookServiceShould
     {
-        private BookService _bookService;
+        private readonly IBookService _bookService;
+        private readonly BookDbContext _booDbContext;
+        private BookService _service;
+
+        public BookServiceShould(IBookService bookService, BookDbContext bookDbContext)
+        {
+            _bookService = bookService;
+            _booDbContext = bookDbContext;
+        }
 
         [SetUp]
         public void Setup()
-        {
-            _bookService = new BookService();
+        {            
+            _service = new BookService(_booDbContext);
         }
 
         [Test]
-        public void Test1()
-        {
-            Assert.Pass();
+        public void GetAllBooksShould()
+        {            
+            Assert.Equals(_service.GetAllBooksAsync()..Wait(), true);
         }
 
         [Test]
