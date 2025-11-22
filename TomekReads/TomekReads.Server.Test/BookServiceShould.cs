@@ -23,9 +23,10 @@ namespace TomekReads.Server.Test
         }
 
         [Test]
-        public void GetAllBooksShould()
-        {            
-            Assert.Equals(_service.GetAllBooksAsync()..Wait(), true);
+        public async Task GetAllBooksShould()
+        {
+            var books = await _service.GetAllBooksAsync();
+            Assert.Equals(books.Leng, true);
         }
 
         [Test]
