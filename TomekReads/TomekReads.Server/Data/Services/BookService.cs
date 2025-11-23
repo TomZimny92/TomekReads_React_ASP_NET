@@ -175,5 +175,9 @@ namespace TomekReads.Server.Data.Services
             }
         }
 
+        public string TestTest()
+        {
+            return "test";
+        }
     }
 }

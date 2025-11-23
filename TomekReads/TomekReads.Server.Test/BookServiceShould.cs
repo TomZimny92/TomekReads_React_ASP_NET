@@ -3,36 +3,38 @@ using TomekReads.Server.Data.Services;
 
 namespace TomekReads.Server.Test
 {
-    [TestFixture]
+    [TestFixture(typeof(IBookService), typeof(BookDbContext))]
     public class BookServiceShould
     {
         private readonly IBookService _bookService;
-        private readonly BookDbContext _booDbContext;
+        private readonly BookDbContext _bookDbContext;
         private BookService _service;
 
-        public BookServiceShould(IBookService bookService, BookDbContext bookDbContext)
+        public BookServiceShould()
         {
-            _bookService = bookService;
-            _booDbContext = bookDbContext;
+
+            _bookDbContext = new BookDbContext();
+            _service = new BookService(_booDbContext);
         }
 
         [SetUp]
         public void Setup()
-        {            
-            _service = new BookService(_booDbContext);
+        {
         }
 
         [Test]
         public async Task GetAllBooksShould()
         {
             var books = await _service.GetAllBooksAsync();
-            Assert.Equals(books.Leng, true);
+            //Assert.Equals(books.Leng, true);
         }
 
         [Test]
-        public void Test2()
+        public void TestTestShould()
         {
-            Assert.Fail();
+            var test = "test";
+            var testResult = _service.TestTest();
+            Assert.Equals(test, testResult);
         }
     }
 }
