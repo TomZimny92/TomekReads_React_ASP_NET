@@ -10,7 +10,7 @@
       {
         "Path": "TomekReads.Server\\TomekReads.Server.csproj",
         "Action": "Start",
-        "DebugTarget": "http"
+        "DebugTarget": "https"
       }
     ]
   }
